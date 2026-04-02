@@ -21,6 +21,16 @@ To build an **end-to-end fraud detection system** that:
 
 ## 📊 Dataset Description
 
+## 📥 Dataset
+
+The dataset used in this project is publicly available on Kaggle:
+
+🔗 https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
+
+Due to GitHub file size limitations, the dataset is not included in this repository.
+
+Please download it manually and place it inside the `data/` folder.
+
 This project uses the **Credit Card Fraud Detection dataset**, which contains real-world transaction data.
 
 ### 🔹 Key Details:
