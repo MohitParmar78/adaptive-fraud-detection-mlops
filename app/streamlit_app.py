@@ -64,7 +64,7 @@ if page == "Prediction":
         # Call FastAPI
         try:
             response = requests.post(
-            "https://your-api.onrender.com/predict",
+            "https://fraud-api-i3ru.onrender.com/predict",
             json=data,
             timeout=60
             )
