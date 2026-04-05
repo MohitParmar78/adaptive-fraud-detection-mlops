@@ -2,6 +2,7 @@ import shap
 import joblib
 import os
 import pandas as pd
+import numpy as np
 
 
 class ShapExplainer:
@@ -12,12 +13,10 @@ class ShapExplainer:
 
         self.model = joblib.load(os.path.join(ARTIFACTS_PATH, "xgb_model.pkl"))
 
-        # Background data
-        background = pd.read_csv(os.path.join(BASE_DIR, "data/creditcard.csv")) \
-                        .drop("Class", axis=1) \
-                        .sample(100, random_state=42)
+        # ✅ FIX: use known feature count (30)
+        background = np.zeros((50, 30))
 
-        # ✅ WRAP MODEL (KEY FIX)
+        # Wrap model
         def model_fn(X):
             return self.model.predict_proba(X)
 
