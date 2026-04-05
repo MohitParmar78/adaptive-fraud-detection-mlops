@@ -2,9 +2,12 @@ import sqlite3
 import pandas as pd
 import os
 
-# ✅ Dynamic path
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
-DB_PATH = os.path.join(BASE_DIR, "data", "fraud.db")
+DATA_DIR = os.path.join(BASE_DIR, "data")
+
+os.makedirs(DATA_DIR, exist_ok=True)  # 🔥 THIS IS CRITICAL
+
+DB_PATH = os.path.join(DATA_DIR, "fraud.db")
 
 
 def init_db():
