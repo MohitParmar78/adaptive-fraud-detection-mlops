@@ -12,8 +12,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from src.pipeline.predict_pipeline import PredictPipeline
 from src.explanability.shap_explainer import ShapExplainer
-from src.monitoring.drift import detect_drift
-from src.pipeline.retrain_pipeline import retrain
 
 # Load pipeline
 pipeline = PredictPipeline()
