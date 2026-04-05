@@ -1,8 +1,12 @@
 pandas
-numpy
 scikit-learn
 matplotlib
 seaborn
 jupyter
 xgboost
 imbalanced-learn
+fastapi[standard]
+streamlit
+shap
+numpy==1.26.4
+evidently==0.4.19
