@@ -62,12 +62,18 @@ if page == "Prediction":
         data = input_df.to_dict(orient="records")[0]
 
         # Call FastAPI
-        response = requests.post(
-            "http://127.0.0.1:8000/predict",
-            json=data
-        )
+        try:
+            response = requests.post(
+            "https://your-api.onrender.com/predict",
+            json=data,
+            timeout=60
+            )
 
-        result = response.json()
+            result = response.json()
+
+        except Exception as e:
+            st.error("⏳ Server is waking up or unreachable. Try again.")
+            st.stop()
 
         pred = result["fraud_prediction"]
         prob = result["fraud_probability"]
