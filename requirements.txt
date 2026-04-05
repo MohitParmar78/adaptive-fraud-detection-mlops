@@ -11,4 +11,3 @@ shap
 numpy==1.26.4
 evidently==0.4.19
 joblib
-pydantic==1.10.13
