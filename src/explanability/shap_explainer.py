@@ -12,6 +12,15 @@ class ShapExplainer:
         ARTIFACTS_PATH = os.path.join(BASE_DIR, "artifacts")
 
         self.model = joblib.load(os.path.join(ARTIFACTS_PATH, "xgb_model.pkl"))
+        
+        '''
+        #run this in local host
+        
+        # Background data
+        background = pd.read_csv(os.path.join(BASE_DIR, "data/creditcard.csv")) \
+                        .drop("Class", axis=1) \
+                        .sample(100, random_state=42)
+        '''
 
         # ✅ FIX: use known feature count (30)
         background = np.zeros((50, 30))
