@@ -138,6 +138,13 @@ if page == "Prediction":
             st.success("✅ Low Risk → Allow")
             
 elif page == "Drift Monitoring":
+    
+    try:
+        from src.monitoring.drift import detect_drift
+        from src.pipeline.retrain_pipeline import retrain
+    except:
+        st.error("⚠️ Drift feature not supported in this environment")
+        st.stop()
 
     st.title("📉 Data Drift Monitoring")
 
