@@ -118,6 +118,8 @@ Two main dashboards:
 
 ---
 
+Note: Drift detection and retraining require persistent storage. On Streamlit Cloud the prediction and SHAP explainability features are fully functional; drift/retrain are demonstrated locally via SQLite.
+
 ### 🔹 5. Database Layer (`db.py`)
 
 * SQLite-based storage
