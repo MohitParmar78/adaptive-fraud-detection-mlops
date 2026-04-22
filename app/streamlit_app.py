@@ -86,19 +86,19 @@ if page == "Prediction":
         else:
             st.success("✅ Transaction is Safe")
 
-        # 🏆 1. METRIC DISPLAY (ADD HERE)
+        # 🏆 1. METRIC DISPLAY
         st.metric("Fraud Probability", f"{prob:.2%}")
 
-        # 🏆 2. COLUMNS LAYOUT (ADD HERE)
+        # 🏆 2. COLUMNS LAYOUT
         col1, col2 = st.columns(2)
         col1.metric("Prediction", pred)
         col2.metric("Fraud Probability", f"{prob:.2%}")
 
-        # 🏆 3. RISK BAR (keep this)
+        # 🏆 3. RISK BAR
         st.subheader("📈 Risk Level")
         st.progress(float(prob))
 
-        # 🏆 4. CHART (ADD HERE)
+        # 🏆 4. CHART
         st.subheader("📊 Risk Distribution")
         st.bar_chart({
             "Fraud": prob,
@@ -137,6 +137,10 @@ if page == "Prediction":
             
 elif page == "Drift Monitoring":
     
+    # Show the title on the main page first so the UI looks complete
+    st.title("📉 Data Drift Monitoring")
+    st.markdown("### Monitor model health & retrain")
+    
     try:
         from src.monitoring.drift import detect_drift
         from src.pipeline.retrain_pipeline import retrain
@@ -144,23 +148,24 @@ elif page == "Drift Monitoring":
         st.error("⚠️ Drift feature not supported in this environment")
         st.stop()
 
-    st.title("📉 Data Drift Monitoring")
-
-    st.markdown("### Monitor model health & retrain")
-
     # 🧠 RUN DRIFT
     if st.button("🚀 Run Drift Detection"):
 
         with st.spinner("Running drift detection..."):
-
-            # NOTE: path fix (since streamlit runs from app/)
-            report_path = detect_drift("data/creditcard.csv")
-
-        if report_path:
-            st.success("✅ Drift report generated!")
-            st.session_state["drift_done"] = True
-        else:
-            st.warning("⚠️ Not enough data")
+            
+            try:
+                # NOTE: path fix (since streamlit runs from app/)
+                report_path = detect_drift("data/creditcard.csv")
+                
+                if report_path:
+                    st.success("✅ Drift report generated!")
+                    st.session_state["drift_done"] = True
+                else:
+                    st.warning("⚠️ Not enough data")
+                    
+            except Exception as e:
+                st.error("⚠️ Drift feature not supported in this environment")
+                st.stop()
 
     # 📄 OPEN REPORT
     st.subheader("📄 Drift Report")
