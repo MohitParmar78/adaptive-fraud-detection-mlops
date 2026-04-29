@@ -24,12 +24,19 @@ Most models are trained once and decay silently. This system simulates how moder
 ## 🎯 Key Features
 
 ✅ **Decoupled Microservices:** Independent Cloud UI (Hugging Face) and API (Render)
+
 ✅ **Real-time fraud prediction:** Low-latency inference via FastAPI
+
 ✅ **Explainable AI:** SHAP integration for mathematical prediction transparency
+
 ✅ **Data drift detection:** Statistical distribution monitoring using Evidently AI
+
 ✅ **Automated retraining pipeline:** Triggered via UI, tracked via DagsHub/MLflow
+
 ✅ **Cloud Database Telemetry:** Live transaction logging to Neon PostgreSQL
+
 ✅ **Resilient Engineering:** Advanced connection pooling and rollback architecture
+
 
 ---
 
