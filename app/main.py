@@ -2,38 +2,41 @@ from fastapi import FastAPI
 import pandas as pd
 import sys
 import os
+from dotenv import load_dotenv
 
-# ✅ Fix path FIRST
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+load_dotenv()
 
 from src.pipeline.predict_pipeline import PredictPipeline
 from src.monitoring.db import save_to_db, init_db
 
-# Initialize DB
+# Initialize Cloud DB connection on startup
 init_db()
 
-app = FastAPI()
+app = FastAPI(title="Fraud Detection API")
 
-# Load pipeline once (efficient)
+# Load pipeline into memory once (prevents reloading massive models on every API call)
 pipeline = PredictPipeline()
-
 
 @app.get("/")
 def home():
     return {"message": "Fraud Detection API is running 🚀"}
 
-
 @app.post("/predict")
 def predict(data: dict):
+    # 1. Define the exact column order the model was trained on
+    expected_columns = ["Time"] + [f"V{i}" for i in range(1, 29)] + ["Amount"]
+    
+    # 2. Convert the incoming JSON into a Pandas DataFrame and FORCE the column order
+    df = pd.DataFrame([data], columns=expected_columns)
 
-    df = pd.DataFrame([data])
-
+    # 3. Get predictions using the properly ordered data
     pred, prob = pipeline.predict(df)
 
-# ✅ Save to DB
+    # 4. Save to Cloud DB for future drift detection and retraining
     save_to_db(data, int(pred), float(prob))
 
-    # Decision logic
+    # Business Logic Layer
     if prob > 0.8:
         action = "🚫 Block Transaction"
     elif prob > 0.4:
@@ -45,17 +48,4 @@ def predict(data: dict):
         "fraud_prediction": int(pred),
         "fraud_probability": float(prob),
         "recommended_action": action
-}    
-    
-@app.get("/health")
-def health():
-    return {"status": "OK"}
-
-
-@app.get("/model-info")
-def model_info():
-    return {
-        "models": ["Random Forest", "XGBoost"],
-        "ensemble": "average probability",
-        "status": "active"
     }
