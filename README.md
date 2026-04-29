@@ -197,9 +197,11 @@ Create a .env file in the root directory:
 ### 5️⃣ Run Microservices
 
 Terminal 1 (Backend):
+
     uvicorn app.main:app --reload
 
 Terminal 2 (Frontend):
+
     streamlit run app/streamlit_app.py
 
 ---
