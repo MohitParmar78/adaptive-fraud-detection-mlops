@@ -88,16 +88,22 @@ Most models are trained once and decay silently. This system simulates how moder
 * Model training (Random Forest + XGBoost)
 * **[UPGRADE]** MLflow integration for hyperparameter tracking and model versioning
 
+  
+
 ### 🔹 2. Prediction Pipeline (predict_pipeline.py)
 * Loads trained .pkl models
 * Enforces strict feature-column ordering
 * Performs weighted ensemble prediction
 * Returns Prediction (0/1) and Risk Probability (%)
 
+  
+
 ### 🔹 3. FastAPI Backend (app/main.py)
 * High-concurrency REST API for predictions
 * Stores incoming data securely into Neon PostgreSQL
 * Hardened database connection pooling to prevent cloud lockouts
+
+  
 
 ### 🔹 4. Streamlit UI (streamlit_app.py)
 Two main dashboards:
@@ -112,23 +118,33 @@ Two main dashboards:
 * Generate full Evidently AI HTML reports
 * Trigger MLflow retraining
 
+  
+
 ### 🔹 5. Database Layer (db.py)
 * **[UPGRADE]** Migrated from local SQLite to Neon PostgreSQL via SQLAlchemy
 * Implements explicit try-except-rollback handling
 * Stores input data, predictions, and human-verified Actual_Class labels
 
+  
+
 ### 🔹 6. Drift Detection (drift.py)
 * Compares Training baseline vs. Live Database telemetry
 * Uses Evidently AI to generate comprehensive drift visuals
+
+  
 
 ### 🔹 7. Retraining Pipeline (retrain_pipeline.py)
 * **[UPGRADE]** Human-in-the-Loop workflow (waits for analyst verification)
 * Pulls fresh, verified data from Neon DB
 * Retrains model, updates DagsHub registry, and hot-swaps local artifacts
 
+  
+
 ### 🔹 8. Explainability (shap_explainer.py)
 * Uses TreeExplainer for lightning-fast interpretation
 * Visualizes exact feature contributions pushing the model toward Safe/Fraud
+
+  
 
 ---
 
