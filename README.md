@@ -1,4 +1,4 @@
-# 🚀 Adaptive Real-Time Fraud Detection System with MLOps
+# 🛡️ Fraud Guard Intelligence: Adaptive MLOps System
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-Production-009688)
@@ -70,7 +70,6 @@ Monitoring Layer (Evidently AI Drift Detection)
 Human-in-the-Loop (Verifies Actual_Class)
         ↓
 Retraining Pipeline (Logs to MLflow/DagsHub)
-
 ⚙️ Project Modules
 🔹 1. Data Pipeline (train_pipeline.py)
 Data loading & preprocessing
