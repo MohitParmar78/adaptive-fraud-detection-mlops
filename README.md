@@ -229,8 +229,13 @@ Terminal 2 (Frontend):
 2. Connect GitHub repo.
 3. Add Environment Variables (Copy from your .env file).
 4. Build Settings:
-    Build Command: pip install -r requirements.txt
-    Start Command: uvicorn app.main:app --host 0.0.0.0 --port 10000
+    Build Command:
+   
+       pip install -r requirements.txt
+   
+    Start Command:
+   
+       uvicorn app.main:app --host 0.0.0.0 --port 10000
 
 ### 🚀 Deploy UI (Hugging Face Spaces)
 
@@ -238,7 +243,8 @@ Terminal 2 (Frontend):
 2. Add all requirements.txt and project files.
 3. Add Environment Secrets in the Space Settings.
 4. IMPORTANT: Update API_URL secret to point to your new live Render URL:
-    API_URL: https://your-render-url.onrender.com/predict
+   
+       API_URL: https://your-render-url.onrender.com/predict
 
 ---
 
