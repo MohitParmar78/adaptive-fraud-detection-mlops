@@ -178,20 +178,24 @@ Two main dashboards:
 
 ### 2️⃣ Environment Setup
 Create a .env file in the root directory:
+
     DATABASE_URL="postgresql://user:pass@your-neon-url/dbname?sslmode=require"
     API_URL="http://127.0.0.1:8000/predict"
     MLFLOW_TRACKING_URI="https://dagshub.com/YourUsername/repo.mlflow"
     DAGSHUB_USER_TOKEN="your_token"
 
 ### 3️⃣ Create Python Environment
+
     conda create -n fraud-env python=3.12
     conda activate fraud-env
     pip install -r requirements.txt
 
 ### 4️⃣ Train Initial Model
+
     python -m src.pipeline.train_pipeline
 
 ### 5️⃣ Run Microservices
+
 Terminal 1 (Backend):
     uvicorn app.main:app --reload
 
