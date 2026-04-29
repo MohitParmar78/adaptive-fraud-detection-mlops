@@ -1,29 +1,35 @@
 # 🚀 Adaptive Real-Time Fraud Detection System with MLOps
 
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-Production-009688)
+![Streamlit](https://img.shields.io/badge/Streamlit-UI-FF4B4B)
+![MLflow](https://img.shields.io/badge/MLflow-Tracking-0194E2)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon_Cloud-336791)
+
 ---
 
 ## 📌 Overview
 
-This project is an **end-to-end production-ready fraud detection system** that combines:
+This project is an **end-to-end, production-ready distributed MLOps system** that combines:
 
-* Real-time prediction
-* Model explainability (SHAP)
-* Data drift monitoring
-* Automated retraining pipeline
+* Real-time Microservice Prediction
+* Model Explainability (SHAP)
+* Continuous Data Drift Monitoring (Evidently AI)
+* Human-in-the-Loop (HITL) Retraining Pipeline
 
-It simulates how modern financial systems detect fraud dynamically and adapt to changing patterns.
+Most models are trained once and decay silently. This system simulates how modern financial architectures dynamically detect fraud, monitor their own health, and adapt to evolving hacker patterns over time.
 
 ---
 
 ## 🎯 Key Features
 
-✅ Real-time fraud prediction via API
-✅ Interactive UI using Streamlit
-✅ Explainable AI using SHAP
-✅ Data drift detection using Evidently AI
-✅ Automated retraining pipeline
-✅ Database-based data collection (SQLite)
-✅ End-to-end MLOps workflow
+✅ **Decoupled Microservices:** Independent Cloud UI (Hugging Face) and API (Render)
+✅ **Real-time fraud prediction:** Low-latency inference via FastAPI
+✅ **Explainable AI:** SHAP integration for mathematical prediction transparency
+✅ **Data drift detection:** Statistical distribution monitoring using Evidently AI
+✅ **Automated retraining pipeline:** Triggered via UI, tracked via DagsHub/MLflow
+✅ **Cloud Database Telemetry:** Live transaction logging to Neon PostgreSQL
+✅ **Resilient Engineering:** Advanced connection pooling and rollback architecture
 
 ---
 
@@ -37,7 +43,7 @@ It simulates how modern financial systems detect fraud dynamically and adapt to 
 
 * 284,807 transactions
 * 492 fraud cases
-* Highly imbalanced
+* Highly imbalanced (0.17% Fraud)
 
 ### Features
 
@@ -50,291 +56,219 @@ It simulates how modern financial systems detect fraud dynamically and adapt to 
 
 ## 🧠 System Architecture
 
-```
-User (Streamlit UI)
+```text
+User (Streamlit UI on Hugging Face)
         ↓
-FastAPI Backend (REST API)
+FastAPI Backend (REST API on Render)
         ↓
-ML Model (RF + XGBoost Ensemble)
+ML Model (XGBoost + RF Ensemble)
         ↓
-SQLite Database (stores live data)
+Neon PostgreSQL (Stores live cloud telemetry)
         ↓
-Monitoring Layer (Drift Detection)
+Monitoring Layer (Evidently AI Drift Detection)
         ↓
-Retraining Pipeline
-```
+Human-in-the-Loop (Verifies Actual_Class)
+        ↓
+Retraining Pipeline (Logs to MLflow/DagsHub)
 
----
+⚙️ Project Modules
+🔹 1. Data Pipeline (train_pipeline.py)
+Data loading & preprocessing
 
-## ⚙️ Project Modules
+Feature scaling
 
-### 🔹 1. Data Pipeline (`train_pipeline.py`)
+SMOTE for severe class imbalance handling
 
-* Data loading & preprocessing
-* Feature scaling
-* SMOTE for imbalance handling
-* Model training (Random Forest + XGBoost)
-* Hyperparameter tuning
-* Saves models in `artifacts/`
+Model training (Random Forest + XGBoost)
 
----
+[UPGRADE] MLflow integration for hyperparameter tracking and model versioning
 
-### 🔹 2. Prediction Pipeline (`predict_pipeline.py`)
+🔹 2. Prediction Pipeline (predict_pipeline.py)
+Loads trained .pkl models
 
-* Loads trained models
-* Applies preprocessing
-* Performs ensemble prediction
-* Returns:
+Enforces strict feature-column ordering
 
-  * Prediction (0/1)
-  * Probability
+Performs weighted ensemble prediction
 
----
+Returns Prediction (0/1) and Risk Probability (%)
 
-### 🔹 3. FastAPI Backend (`app/main.py`)
+🔹 3. FastAPI Backend (app/main.py)
+High-concurrency REST API for predictions
 
-* REST API for predictions
-* Stores incoming data into SQLite DB
-* Acts as bridge between UI and model
+Stores incoming data securely into Neon PostgreSQL
 
----
+Hardened database connection pooling to prevent cloud lockouts
 
-### 🔹 4. Streamlit UI (`streamlit_app.py`)
-
+🔹 4. Streamlit UI (streamlit_app.py)
 Two main dashboards:
 
-#### 🟢 Prediction Dashboard
+🟢 Prediction Dashboard
 
-* User input form
-* Fraud prediction
-* Risk visualization
-* SHAP explainability
+Interactive transaction input
 
-#### 📉 Drift Monitoring Dashboard
+Dynamic "AI Sensitivity" Threshold Slider
 
-* Run drift detection
-* View drift report
-* Trigger model retraining
+Real-time SHAP Explainability Waterfall chart
 
----
+📉 Drift Monitoring Dashboard
 
-### 🔹 5. Database Layer (`db.py`)
+Inject synthetic drift data
 
-* SQLite-based storage
-* Stores:
+Generate full Evidently AI HTML reports
 
-  * Input data
-  * Predictions
-  * Probabilities
+Trigger MLflow retraining
 
----
+🔹 5. Database Layer (db.py)
+[UPGRADE] Migrated from local SQLite to Neon PostgreSQL via SQLAlchemy
 
-### 🔹 6. Drift Detection (`drift.py`)
+Implements explicit try-except-rollback handling
 
-* Compares:
+Stores input data, predictions, and human-verified Actual_Class labels
 
-  * Training data vs Live DB data
-* Uses Evidently AI
-* Generates HTML report
+🔹 6. Drift Detection (drift.py)
+Compares Training baseline vs. Live Database telemetry
 
----
+Uses Evidently AI to generate comprehensive drift visuals
 
-### 🔹 7. Retraining Pipeline (`retrain_pipeline.py`)
+🔹 7. Retraining Pipeline (retrain_pipeline.py)
+[UPGRADE] Human-in-the-Loop workflow (waits for analyst verification)
 
-* Loads DB data
-* Converts predictions → labels
-* Retrains model
-* Updates artifacts
+Pulls fresh, verified data from Neon DB
 
----
+Retrains model, updates DagsHub registry, and hot-swaps local artifacts
 
-### 🔹 8. Explainability (`shap_explainer.py`)
+🔹 8. Explainability (shap_explainer.py)
+Uses TreeExplainer for lightning-fast interpretation
 
-* Uses SHAP
-* Provides feature-level contribution
-* Visualized in Streamlit
+Visualizes exact feature contributions pushing the model toward Safe/Fraud
 
----
-
-## 🔄 End-to-End Flow
-
-```
-User Input → Streamlit
+🔄 End-to-End Flow
+Plaintext
+User Input → Streamlit (HF Spaces)
         ↓
-FastAPI API Call
+FastAPI HTTP Call (Render)
         ↓
-Prediction
+Ensemble Prediction + SHAP Computation
         ↓
-Store in DB
+Log to PostgreSQL Cloud DB
         ↓
-Drift Detection
+Human Analyst Updates Ground Truth
         ↓
-Retraining Trigger
+Drift Detection Alert
         ↓
-Updated Model
-```
+Trigger MLflow Retraining
+📈 Evaluation Metrics
+F1-Score (Primary focus due to high class imbalance)
 
----
+Precision (Minimizing False Positives)
 
-## 📈 Evaluation Metrics
+Recall (Minimizing False Negatives)
 
-* Precision
-* Recall
-* F1-score
+Accuracy is avoided as an evaluation metric due to the 99.8% normal class dominance.
 
-> Accuracy is avoided due to class imbalance.
+🛠️ Tech Stack
+Languages: Python
 
----
+ML Frameworks: Scikit-learn, XGBoost, Imbalanced-learn
 
-## 🛠️ Tech Stack
+Backend: FastAPI, Uvicorn, SQLAlchemy
 
-* Python
-* Pandas, NumPy
-* Scikit-learn, XGBoost
-* FastAPI
-* Streamlit
-* SHAP
-* Evidently AI
-* SQLite
+Frontend: Streamlit
 
----
+MLOps & XAI: MLflow, DagsHub, Evidently AI, SHAP
 
-## 🧪 How to Run Locally
+Database & Cloud: PostgreSQL (Neon), Render, Hugging Face
 
-### 1️⃣ Clone Repo
-
-```bash
+🧪 How to Run Locally
+1️⃣ Clone Repo
+Bash
 git clone <your-repo-url>
 cd fraud-detection-mlops
-```
+2️⃣ Environment Setup
+Create a .env file in the root directory:
 
----
-
-### 2️⃣ Create Environment
-
-```bash
-conda create -n fraud-env python=3.10
+Code snippet
+DATABASE_URL="postgresql://user:pass@your-neon-url/dbname?sslmode=require"
+API_URL="[http://127.0.0.1:8000/predict](http://127.0.0.1:8000/predict)"
+MLFLOW_TRACKING_URI="[https://dagshub.com/YourUsername/repo.mlflow](https://dagshub.com/YourUsername/repo.mlflow)"
+DAGSHUB_USER_TOKEN="your_token"
+3️⃣ Create Python Environment
+Bash
+conda create -n fraud-env python=3.12
 conda activate fraud-env
 pip install -r requirements.txt
-```
-
----
-
-### 3️⃣ Train Model
-
-```bash
+4️⃣ Train Initial Model
+Bash
 python -m src.pipeline.train_pipeline
-```
+5️⃣ Run Microservices
+Terminal 1 (Backend):
 
----
-
-### 4️⃣ Run FastAPI
-
-```bash
+Bash
 uvicorn app.main:app --reload
-```
+Terminal 2 (Frontend):
 
----
-
-### 5️⃣ Run Streamlit
-
-```bash
+Bash
 streamlit run app/streamlit_app.py
-```
+🌐 Deployment Guide
+🚀 Deploy Backend (Render)
+Go to https://render.com and create a Web Service.
 
----
+Connect GitHub repo.
 
-## 🌐 Deployment Guide
+Add Environment Variables (Copy from your .env file).
 
----
+Build Settings:
 
-# 🚀 Deploy Backend (Render)
-
-### Steps:
-
-1. Go to https://render.com
-2. Create **Web Service**
-3. Connect GitHub repo
-4. Add settings:
-
-```
+Plaintext
 Build Command: pip install -r requirements.txt
 Start Command: uvicorn app.main:app --host 0.0.0.0 --port 10000
-```
+🚀 Deploy UI (Hugging Face Spaces)
+Go to https://huggingface.co/spaces and create a Streamlit Space.
 
----
+Add all requirements.txt and project files.
 
-# 🚀 Deploy UI (Streamlit Cloud)
+Add Environment Secrets in the Space Settings.
 
-### Steps:
+⚠️ IMPORTANT: Update API_URL secret to point to your new live Render URL:
 
-1. Go to https://share.streamlit.io
-2. Connect repo
-3. Select:
+Plaintext
+API_URL: [https://your-render-url.onrender.com/predict](https://your-render-url.onrender.com/predict)
+📊 Drift Monitoring
+Uses live cloud DB telemetry.
 
-```
-app/streamlit_app.py
-```
+Compares with the original training distribution.
 
----
+Detects hacker behavior shifts and generates a visual HTML report within Streamlit.
 
-### ⚠️ IMPORTANT
+🔁 Retraining Strategy (Human-in-the-Loop)
+Triggered manually via the UI monitoring tab.
 
-Update API URL in Streamlit:
+Does not train on blind model guesses. Wait for Actual_Class DB column to be updated by a verified human analyst.
 
-```python
-response = requests.post(
-    "https://your-render-url/predict",
-    json=data
-)
-```
+Updates model artifacts locally and versions them securely in MLflow.
 
----
+🚀 Future Improvements
+[x] Migrate to Cloud PostgreSQL
 
-## 📊 Drift Monitoring
+[x] Implement MLflow Model Versioning
 
-* Uses live DB data
-* Compares with training dataset
-* Detects distribution changes
-* Generates visual report
+[ ] Automated retraining CRON scheduler
 
----
+[ ] Full Docker Compose integration for local testing
 
-## 🔁 Retraining Strategy
+[ ] CI/CD GitHub Actions pipeline
 
-* Triggered manually via UI
-* Uses new collected data
-* Updates model artifacts
+🏆 Key Highlights
+True Decoupled Microservices Architecture
 
-> ⚠️ Note: Uses predicted labels (demo purpose)
+Production-grade Database Engineering
 
----
+Explainable AI Integration (Business Logic alignment)
 
-## 🚀 Future Improvements
+Full Continuous Training (CT) MLOps loop
 
-* Real label feedback system
-* Automated retraining scheduler
-* Model versioning (MLflow)
-* CI/CD pipeline
-* Docker + Kubernetes
+👨‍💻 Author
+Mohit Parmar Data Scientist & MLOps Engineer
 
----
-
-## 🏆 Key Highlights
-
-* Full MLOps pipeline
-* Real-time system design
-* Explainable AI integration
-* Monitoring + retraining loop
-
----
-
-## 👨‍💻 Author
-
-**Mohit Rajput**
-
----
-
-## ⭐ If you like this project
-
-Give it a ⭐ on GitHub!
+⭐ If you like this project
+Give it a ⭐ on GitHub to support the development of open-source MLOps architecture!
